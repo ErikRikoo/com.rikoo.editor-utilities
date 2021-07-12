@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Packages.com.rikoo.editor.attributes.Editor.Attributes.AbstractReference
+namespace EditorUtilities.Editor.Attributes.AbstractReference
 {
     public class AbstractReferenceAttribute : PropertyAttribute
     {
