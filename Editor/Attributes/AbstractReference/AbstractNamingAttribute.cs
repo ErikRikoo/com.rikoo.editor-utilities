@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Editor.Attributes.AbstractReference
+namespace EditorUtilities.Editor.Attributes.AbstractReference
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class AbstractNamingAttribute : Attribute

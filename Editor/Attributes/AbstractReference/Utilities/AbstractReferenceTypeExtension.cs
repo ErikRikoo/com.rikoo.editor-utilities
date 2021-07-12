@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Reflection;
-using System.Security.Permissions;
-using Editor.Extensions;
+using EditorUtilities.Editor.Extensions;
 using UnityEngine;
 
-namespace Editor.Attributes.AbstractReference.Utilities
+namespace EditorUtilities.Editor.Attributes.AbstractReference.Utilities
 {
     public static class AbstractReferenceTypeExtension
     {

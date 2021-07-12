@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Editor.Attributes.AbstractReference.Utilities;
-using Editor.Extensions;
+using EditorUtilities.Editor.Attributes.AbstractReference.Utilities;
+using EditorUtilities.Editor.Extensions;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Attributes.AbstractReference.PropertyHandler
+namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 {
     public abstract class APropertyHandler
     {

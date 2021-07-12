@@ -1,17 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using Editor.Attributes.AbstractReference.PropertyHandler;
-using Editor.Extensions;
+﻿using Editor.Attributes.AbstractReference.PropertyHandler;
+using EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.Rendering.VirtualTexturing;
-using UnityEngine.UIElements;
-using Object = System.Object;
 
-namespace Packages.com.rikoo.editor.attributes.Editor.Attributes.AbstractReference
+namespace EditorUtilities.Editor.Attributes.AbstractReference
 {
     [CustomPropertyDrawer(typeof(AbstractReferenceAttribute))]
     public class AbstractReferenceDrawer : PropertyDrawer

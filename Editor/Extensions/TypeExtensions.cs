@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Editor.Extensions
+namespace EditorUtilities.Editor.Extensions
 {
     public static class TypeExtensions
     {

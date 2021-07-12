@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using UnityEditor;
 
-namespace Editor.Extensions
+namespace EditorUtilities.Editor.Extensions
 {
     public static class SerializedPropertyExtension
     {
