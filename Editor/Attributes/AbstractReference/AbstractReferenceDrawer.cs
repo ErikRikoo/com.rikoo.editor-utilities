@@ -1,5 +1,4 @@
-﻿using Editor.Attributes.AbstractReference.PropertyHandler;
-using EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler;
+﻿using EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler;
 using UnityEditor;
 using UnityEngine;
 
