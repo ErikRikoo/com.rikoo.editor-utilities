@@ -5,7 +5,7 @@ using EditorUtilities.Editor.Extensions;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Attributes.AbstractReference.PropertyHandler
+namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 {
     public class ArrayPropertyHandler : APropertyHandler
     {

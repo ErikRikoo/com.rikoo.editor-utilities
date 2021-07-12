@@ -3,7 +3,7 @@ using EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Attributes.AbstractReference.PropertyHandler
+namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 {
     public class DirectPropertyHandler : APropertyHandler
     {
