@@ -1,0 +1,9 @@
+{
+  "name": "com.rikoo.editor-utilities",
+  "displayName": "Editor Utilities",
+  "version": "0.1.0",
+  "description": "The package contains some useful utilities that can be used in the Unity Editor",
+  "keywords": [
+    "utility", "editor"
+  ]
+}
