@@ -1,4 +1,5 @@
 ﻿using EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler;
+using EditorUtilities.Editor.Extensions;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,15 +18,15 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference
         {
             if (fieldInfo.FieldType.IsArray)
             {
-                return new ArrayPropertyHandler(property, fieldInfo);
+                return new ArrayPropertyHandler(property);
             }
 
-            return new DirectPropertyHandler(property, fieldInfo);
+            return new DirectPropertyHandler(property);
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return fieldInfo.GetValue(property.serializedObject.targetObject) == null
+            return property.GetInstanceField().Value == null
                 ? EditorGUIUtility.singleLineHeight
                 : EditorGUI.GetPropertyHeight(property);
         }

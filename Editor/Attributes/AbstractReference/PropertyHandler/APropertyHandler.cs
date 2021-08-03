@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using EditorUtilities.Editor.Attributes.AbstractReference.Utilities;
 using EditorUtilities.Editor.Extensions;
+using EditorUtilities.Editor.Extensions.TypeSystemUtilities;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -11,13 +11,13 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 {
     public abstract class APropertyHandler
     {
+        protected InstanceField m_Value;
         protected SerializedProperty m_Property;
-        protected FieldInfo m_FieldInfo;
 
-        protected APropertyHandler(SerializedProperty property, FieldInfo fieldInfo)
+        protected APropertyHandler(SerializedProperty property)
         {
+            m_Value = property.GetInstanceField();
             m_Property = property;
-            m_FieldInfo = fieldInfo;
         }
 
         public void HandleProperty(Rect position, SerializedProperty property, GUIContent label)
@@ -26,6 +26,11 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
             if (IsPropertyNull())
             {
                 Type baseType = property.GetManagedReferenceType();
+                if (!baseType.IsAbstract)
+                {
+                    Debug.LogError("This type should be abstract to use that attribute");
+                }
+                
                 if (ShouldDisplayLabelWhenNull)
                 {
                     EditorGUI.LabelField(position, property.displayName);
@@ -58,8 +63,15 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 
         public virtual bool ShouldDisplayLabelWhenNull => false;
 
-        public abstract bool IsPropertyNull();
-        public abstract void SetPropertyValue(object instance);
+        public bool IsPropertyNull()
+        {
+            return m_Value.Value == null;
+        }
+
+        public void SetPropertyValue(object instance)
+        {
+            m_Value.SetValue(instance);
+        }
         
         private string AttributeInvalidMessage => "The attribute should be on a SerializeReference property";
         private void CheckAttributeAttachment(SerializedProperty _property)
