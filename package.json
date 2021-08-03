@@ -1,7 +1,7 @@
 {
   "name": "com.rikoo.editor-utilities",
   "displayName": "Editor Utilities",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "The package contains some useful utilities that can be used in the Unity Editor",
   "keywords": [
     "utility", "editor"
