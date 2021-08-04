@@ -1,5 +1,6 @@
 ﻿using System;
 using EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler;
+using EditorUtilities.Editor.Attributes.AbstractReference.Utilities;
 using EditorUtilities.Editor.Extensions;
 using UnityEditor;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 
         public override string GetDisplayLabel(GUIContent label)
         {
-            return m_Value.Value.GetType().Name;
+            return m_Value.Value.GetType().GetGUIContent().text;
         }
     }
 }

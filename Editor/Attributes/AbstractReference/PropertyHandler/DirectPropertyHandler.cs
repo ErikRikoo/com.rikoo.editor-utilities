@@ -1,4 +1,5 @@
 ﻿using EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler;
+using EditorUtilities.Editor.Attributes.AbstractReference.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 
         public override string GetDisplayLabel(GUIContent label)
         {
-            string typeName = m_Value.Value.GetType().Name;
+            string typeName = m_Value.Value.GetType().GetGUIContent().text;
             return $"{label.text} ({typeName})";
         }
 
