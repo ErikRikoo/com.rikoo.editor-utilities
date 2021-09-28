@@ -93,7 +93,6 @@ On this one you can see, that:
 
 Here the result in the editor:
 ![Abstract Reference Result](./img/abstract-reference-result.gif)
-
 </details>
 
 
