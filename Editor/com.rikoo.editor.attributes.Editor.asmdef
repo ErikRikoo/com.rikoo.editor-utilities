@@ -1,7 +1,9 @@
 {
     "name": "com.rikoo.editor.attributes.Editor",
+    "rootNamespace": "",
     "references": [
-        "GUID:0b7e139c0669c694581f4e8f52ebb8ad"
+        "GUID:0b7e139c0669c694581f4e8f52ebb8ad",
+        "GUID:24d1b07104f2e78439f6a8f07f833dc3"
     ],
     "includePlatforms": [
         "Editor"
