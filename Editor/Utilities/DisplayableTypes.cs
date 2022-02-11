@@ -6,7 +6,7 @@ using EditorUtilities.Editor.Attributes.AbstractReference.Utilities;
 using UnityEditor;
 using UnityEngine;
 
-namespace Utilities
+namespace EditorUtilities.Editor.Utilities
 {
     [Serializable]
     public struct DisplayableTypes : IEnumerable<(Type, GUIContent)>
