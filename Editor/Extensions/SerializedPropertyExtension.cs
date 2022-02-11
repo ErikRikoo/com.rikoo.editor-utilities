@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using EditorUtilities.Editor.Extensions.TypeSystemUtilities;
 using UnityEditor;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace EditorUtilities.Editor.Extensions
 {
@@ -89,6 +91,104 @@ namespace EditorUtilities.Editor.Extensions
                 Instance = array,
                 Index = index,
             };
+        }
+        
+        public static IEnumerable<SerializedProperty> GetChildren(this SerializedProperty _instance)
+        {
+            SerializedProperty current = _instance.Copy();
+            SerializedProperty end = _instance.Copy();
+            end.Next(false);
+
+            bool shouldContinue = current.Next(true);
+            while (shouldContinue && !SerializedProperty.EqualContents(current, end))
+            {
+                yield return current.Copy();
+                shouldContinue = current.Next(false);
+            }
+        }
+
+        public static FieldInfo GetFieldInfo(this SerializedProperty _instance)
+        {
+            string path = _instance.propertyPath;
+            string[] splittedPath = path.Split('.');
+            Type objectType = _instance.serializedObject.targetObject.GetType();
+            FieldInfo fieldInfo = null;
+            Type currentLookedType = objectType;
+            object obj = _instance.serializedObject.targetObject;
+            
+            for (int i = 0; i < splittedPath.Length; ++i)
+            {
+                Type typeIteration = currentLookedType;
+                do
+                {
+                    fieldInfo = typeIteration.GetField(splittedPath[i], (BindingFlags) (-1));
+                    typeIteration = typeIteration.BaseType;
+
+                } while (fieldInfo == null && typeIteration != null);
+                
+                if (fieldInfo == null)
+                {
+                    return null;
+                }
+
+                obj = fieldInfo.GetValue(obj);
+                if (obj == null)
+                {
+                    return null;
+                }
+                currentLookedType = obj.GetType();
+            }
+
+            return fieldInfo;
+        }
+        
+
+        public static GUIContent GetGUIContent(this SerializedProperty _instance)
+        {
+            return new GUIContent(_instance.displayName, _instance.tooltip);
+        }
+
+        public static void ChangeType(this SerializedProperty _instance, Type _newType)
+        {
+            _instance.managedReferenceValue = Activator.CreateInstance(_newType);
+            _instance.serializedObject.ApplyModifiedProperties();
+        }
+
+        public static void AppendArrayProperty(this SerializedProperty _instance, Object _elementToAdd)
+        {
+            int size = _instance.arraySize;
+            _instance.InsertArrayElementAtIndex(size);
+            _instance.GetArrayElementAtIndex(size).objectReferenceValue = _elementToAdd;
+        }
+        
+        public static void AppendArrayProperty(this SerializedProperty _instance, float _elementToAdd)
+        {
+            int size = _instance.arraySize;
+            _instance.InsertArrayElementAtIndex(size);
+            _instance.GetArrayElementAtIndex(size).floatValue = _elementToAdd;
+        }
+
+        public static bool FindObjectIndex<T>(this SerializedProperty _instance, T _object, out int _index)
+            where T : UnityEngine.Object
+        {
+            if (_instance == null || !_instance.isArray)
+            {
+                _index = -1;
+                return false;
+            }
+            
+            for (int i = 0; i < _instance.arraySize; i++)
+            {
+                var currentVar = _instance.GetArrayElementAtIndex(i).objectReferenceValue as T;
+                if (_object == currentVar)
+                {
+                    _index = i;
+                    return true;
+                }
+            }
+
+            _index = -1;
+            return false;
         }
     }
 }
