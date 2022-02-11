@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using EditorUtilities.Editor.Extensions;
 using UnityEditor;
 using UnityEngine;
 
-namespace Utilities.Layout.LayoutUtilities
+
+namespace EditorUtilities.Editor.Utilities.Layout.LayoutUtilities
 {
     public static class HorizontalGridLayout
     {

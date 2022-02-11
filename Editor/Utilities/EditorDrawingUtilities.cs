@@ -1,13 +1,9 @@
-﻿using System.Linq;
+﻿using EditorUtilities.Editor.Utilities.Layout.LayoutUtilities;
 using Sirenix.Utilities;
-using Sirenix.Utilities.Editor;
 using UnityEditor;
-using UnityEditor.Graphs;
 using UnityEngine;
-using Utilities.Layout;
-using Utilities.Layout.LayoutUtilities;
 
-namespace Utilities
+namespace EditorUtilities.Editor.Utilities
 {
     public static class EditorDrawingUtilities
     {
@@ -70,22 +66,6 @@ namespace Utilities
         public static bool DrawIndentedButton(string _content, GUIStyle _buttonStyle)
         {
             return DrawIndentedButton(new GUIContent(_content), _buttonStyle);
-        }
-
-        public static string ToNiceName(this string _instance, string _suffix)
-        {
-            string ret = _instance;
-            if (ret.EndsWith(_suffix))
-            {
-                ret = _instance.Substring(0, ret.Length - _suffix.Length);
-            }
-            
-            return ret.ToNiceName();
-        }
-
-        public static string ToNiceName(this string _instance)
-        {
-            return ObjectNames.NicifyVariableName(_instance);
         }
 
         public static bool DisplayFloatFieldAsPercentage(Rect r, float _current, out float newFloatValue)

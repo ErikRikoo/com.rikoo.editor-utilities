@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Utilities.Shapes
+namespace EditorUtilities.Editor.Utilities.Shapes
 {
     public static class ArrowDrawer
     {
