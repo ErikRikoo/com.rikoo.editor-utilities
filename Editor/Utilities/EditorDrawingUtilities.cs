@@ -1,4 +1,5 @@
-﻿using EditorUtilities.Editor.Utilities.Layout.LayoutUtilities;
+﻿using EditorUtilities.Editor.Extensions;
+using EditorUtilities.Editor.Utilities.Layout.LayoutUtilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -111,7 +112,7 @@ namespace EditorUtilities.Editor.Utilities
             {
                 var rect = rects.Current;
                 DrawBorders(rect, 1);
-                EditorGUI.LabelField(rect.Padding(_padding), labels[i], _style);
+                EditorGUI.LabelField(rect.AddPadding(_padding), labels[i], _style);
                 ++i;
             }
         }
