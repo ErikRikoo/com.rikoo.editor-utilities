@@ -1,5 +1,4 @@
 ﻿using EditorUtilities.Editor.Utilities.Layout.LayoutUtilities;
-using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 
