@@ -26,5 +26,15 @@ namespace EditorUtilities.Editor.Extensions
                 _instance.width - splitWidth, _instance.height
             );
         }
+
+        public static Rect AddPadding(this Rect _instance, float _padding)
+        {
+            var paddingVector = new Vector2(_padding, _padding);
+            var rect = new Rect(_instance);
+            rect.position += paddingVector;
+            rect.size -= paddingVector * 2;
+
+            return rect;
+        }
     }
 }
