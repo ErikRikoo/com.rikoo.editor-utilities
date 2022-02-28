@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace EditorUtilities.Editor.Extensions
 {
@@ -35,6 +36,22 @@ namespace EditorUtilities.Editor.Extensions
             rect.size -= paddingVector * 2;
 
             return rect;
+        }
+
+        public static void AddLine(ref this Rect _instance)
+        {
+            _instance.AddLine(EditorGUIUtility.singleLineHeight);
+        }
+        
+        public static void AddLine(ref this Rect _instance, float _lineHeight)
+        {
+            _instance.height -= _lineHeight;
+            _instance.y += _lineHeight;
+        }
+
+        public static void Indent(ref this Rect _instance)
+        {
+            _instance = EditorGUI.IndentedRect(_instance);
         }
     }
 }

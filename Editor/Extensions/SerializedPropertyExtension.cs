@@ -92,8 +92,10 @@ namespace EditorUtilities.Editor.Extensions
                 Index = index,
             };
         }
-        
-        public static IEnumerable<SerializedProperty> GetChildren(this SerializedProperty _instance)
+
+        public static IEnumerable<SerializedProperty> GetChildren(
+            this SerializedProperty _instance, bool _enterChildren = false
+        )
         {
             SerializedProperty current = _instance.Copy();
             SerializedProperty end = _instance.Copy();
@@ -103,7 +105,7 @@ namespace EditorUtilities.Editor.Extensions
             while (shouldContinue && !SerializedProperty.EqualContents(current, end))
             {
                 yield return current.Copy();
-                shouldContinue = current.Next(false);
+                shouldContinue = current.Next(_enterChildren);
             }
         }
 
