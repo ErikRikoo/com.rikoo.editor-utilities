@@ -28,12 +28,23 @@ namespace EditorUtilities.Editor.Utilities
         public static DisplayableTypes CreateFromSubClass<BaseClass>(bool _includeAbstract = false)
         {
             IEnumerable<Type> types = TypeCache.GetTypesDerivedFrom<BaseClass>();
+            return CreateFromEnumerable(types, _includeAbstract);
+        }
+        
+        public static DisplayableTypes CreateFromSubClass(Type _base, bool _includeAbstract = false)
+        {
+            IEnumerable<Type> types = TypeCache.GetTypesDerivedFrom(_base);
+            return CreateFromEnumerable(types, _includeAbstract);
+        }
+        
+        private static DisplayableTypes CreateFromEnumerable(IEnumerable<Type> _types, bool _includeAbstract)
+        {
             if (!_includeAbstract)
             {
-                types = types.Where(t => !t.IsAbstract);
+                _types = _types.Where(t => !t.IsAbstract);
             }
 
-            return new DisplayableTypes(types.ToArray());
+            return new DisplayableTypes(_types.ToArray());
         }
 
         public IEnumerator<(Type, GUIContent)> GetEnumerator()

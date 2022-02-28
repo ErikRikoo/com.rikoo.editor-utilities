@@ -11,8 +11,9 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 
         public override string GetDisplayLabel(GUIContent label)
         {
-            string typeName = m_Value.Value.GetType().GetGUIContent().text;
-            return $"{label.text} ({typeName})";
+            // string typeName = m_Value.Value.GetType().GetGUIContent().text;
+            // return $"{label.text} ({typeName})";
+            return label.text;
         }
 
         public override bool ShouldDisplayLabelWhenNull => true;
