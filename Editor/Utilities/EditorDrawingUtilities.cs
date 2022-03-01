@@ -143,5 +143,25 @@ namespace EditorUtilities.Editor.Utilities
         {
             DrawBorders(_space, _width, Color.white);
         }
+
+        public static bool TryComputeMouseWorldPosition(out RaycastHit _hit)
+        {
+            Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+            return Physics.Raycast(ray, out _hit);
+        }
+        
+        public static bool TryComputeMouseWorldPosition(out Vector3 _point, out Vector3 _normal)
+        {
+            if (TryComputeMouseWorldPosition(out RaycastHit _hit))
+            {
+                _point = _hit.point;
+                _normal = _hit.normal;
+                return true;
+            }
+
+            _point = default;
+            _normal = default;
+            return false;
+        }
     }
 }
