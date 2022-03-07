@@ -63,7 +63,7 @@ namespace EditorUtilities.Editor.Utilities.ToolBox
 
         #region Tool Handling
 
-        [SerializeField] private List<ToolType> m_Instances = new List<ToolType>();
+        [SerializeReference] private List<ToolType> m_Instances = new List<ToolType>();
         [SerializeField] private int m_CurrentToolIndex = -1;
 
         protected ToolType CurrentTool
@@ -96,6 +96,7 @@ namespace EditorUtilities.Editor.Utilities.ToolBox
 
         private void OnEnable()
         {
+            InitToolsIfNeeded();
             SceneView.duringSceneGui -= OnSceneGUI;
             SceneView.duringSceneGui += OnSceneGUI;
         }
