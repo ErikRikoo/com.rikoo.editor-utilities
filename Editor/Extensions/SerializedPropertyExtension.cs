@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -99,13 +100,13 @@ namespace EditorUtilities.Editor.Extensions
         {
             SerializedProperty current = _instance.Copy();
             SerializedProperty end = _instance.Copy();
-            end.Next(false);
+            end.NextVisible(false);
 
-            bool shouldContinue = current.Next(true);
+            bool shouldContinue = current.NextVisible(true);
             while (shouldContinue && !SerializedProperty.EqualContents(current, end))
             {
                 yield return current.Copy();
-                shouldContinue = current.Next(_enterChildren);
+                shouldContinue = current.NextVisible(_enterChildren);
             }
         }
 
@@ -168,6 +169,14 @@ namespace EditorUtilities.Editor.Extensions
             int size = _instance.arraySize;
             _instance.InsertArrayElementAtIndex(size);
             _instance.GetArrayElementAtIndex(size).floatValue = _elementToAdd;
+        }
+
+        public static IEnumerable<SerializedProperty> GetArrayElement(this SerializedProperty _instance)
+        {
+            for (int i = 0; i < _instance.arraySize; ++i)
+            {
+                yield return _instance.GetArrayElementAtIndex(i);
+            }
         }
 
         public static bool FindObjectIndex<T>(this SerializedProperty _instance, T _object, out int _index)
