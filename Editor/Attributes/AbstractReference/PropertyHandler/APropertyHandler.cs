@@ -6,6 +6,7 @@ using EditorUtilities.Editor.Extensions.TypeSystemUtilities;
 using EditorUtilities.Editor.Utilities;
 using Logic.Scripts.Utilities.Extensions;
 using NUnit.Framework;
+using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 
