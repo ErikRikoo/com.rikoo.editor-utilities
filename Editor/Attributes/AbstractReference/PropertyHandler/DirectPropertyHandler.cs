@@ -7,7 +7,6 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 {
     public class DirectPropertyHandler : APropertyHandler
     {
-        public DirectPropertyHandler(SerializedProperty property) : base(property) {}
 
         public override string GetDisplayLabel(GUIContent label)
         {

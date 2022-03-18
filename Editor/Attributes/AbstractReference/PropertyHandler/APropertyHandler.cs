@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using EditorUtilities.Editor.Attributes.AbstractReference.Utilities;
 using EditorUtilities.Editor.Extensions;
 using EditorUtilities.Editor.Extensions.TypeSystemUtilities;
 using EditorUtilities.Editor.Utilities;
@@ -13,17 +11,38 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 {
     public abstract class APropertyHandler
     {
+        private static readonly Color DarkerColor = new Color(0.19f, 0.19f, 0.19f);
+        private static readonly float FoldoutArrowSize = 12;
+        public static readonly int Padding = 4;
+
         protected InstanceField m_Value;
         protected SerializedProperty m_Property;
 
-        protected APropertyHandler(SerializedProperty property)
+        public void Init(SerializedProperty property)
         {
             m_Value = property.GetInstanceField();
             m_Property = property;
         }
 
+        public virtual bool HasBackground => true;
+
         public void HandleProperty(Rect position, SerializedProperty property, GUIContent label)
         {
+            if (!PreDrawing(property))
+            {
+                return;
+            }
+            
+            if (HasBackground)
+            {
+                var backGroundRect = new Rect(position);
+                backGroundRect.Indent();
+                backGroundRect.ExpandLeft(FoldoutArrowSize);
+                EditorGUI.DrawRect(backGroundRect, DarkerColor);
+            }
+            position.AddPadding(Padding);
+
+            
             CheckAttributeAttachment(property);
             Type baseType = property.GetManagedReferenceType();
             bool isPropertyNull = IsPropertyNull();
@@ -50,11 +69,15 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
                 if (GUI.Button(buttonRect, "x"))
                 {
                     SetPropertyValueAndSave(null);
+                    OnRemove();
                 }
             }
 
-            position.x += EditorGUIUtility.labelWidth;
-            position.width -= EditorGUIUtility.labelWidth;
+            if (ShouldDisplayLabelWhenNull)
+            {
+                position.x += EditorGUIUtility.labelWidth;
+                position.width -= EditorGUIUtility.labelWidth;
+            }
             if (!isPropertyNull)
             {
                 position.width -= EditorGUIUtility.singleLineHeight;
@@ -65,20 +88,29 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
             }
         }
 
+        protected virtual void OnRemove() {}
+
         private void DrawPropertiesAndLabel(Rect _position, SerializedProperty _property)
         {
             Rect foldoutPosition = _position;
             foldoutPosition.width = EditorGUIUtility.labelWidth;
             foldoutPosition.height = EditorGUIUtility.singleLineHeight;
             string label = ShouldDisplayLabelWhenNull ? GetDisplayLabel(new GUIContent(_property.displayName)) : "";
-            _property.isExpanded = EditorGUI.Foldout(foldoutPosition, _property.isExpanded, label);
+            if (_property.hasVisibleChildren)
+            {
+                _property.isExpanded = EditorGUI.Foldout(foldoutPosition, _property.isExpanded, label);
+            }
+            else
+            {
+                EditorGUI.LabelField(foldoutPosition, label);
+            }
             _position.AddLine();
 
             if (!_property.isExpanded)
             {
                 return;
             }
-            
+            _position.AddLine(PostDropdownMarginValue);
             ++EditorGUI.indentLevel;
             foreach (var child in _property.GetChildren())
             {
@@ -105,7 +137,7 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 
         public void SetPropertyValue(object instance)
         {
-            m_Value.SetValue(instance);
+            m_Property.managedReferenceValue = instance;
         }
         
         private string AttributeInvalidMessage => "The attribute should be on a SerializeReference property";
@@ -128,6 +160,18 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
         {
             SetPropertyValue(instance);
             m_Property.serializedObject.ApplyModifiedProperties();
+        }
+
+        public static float PostDropdownMarginValue => 3;
+        
+        public static float PostDropdownMargin(SerializedProperty property)
+        {
+            return property.isExpanded && property.hasVisibleChildren? PostDropdownMarginValue : 0;
+        }
+
+        public virtual bool PreDrawing(SerializedProperty _property)
+        {
+            return true;
         }
     }
 }

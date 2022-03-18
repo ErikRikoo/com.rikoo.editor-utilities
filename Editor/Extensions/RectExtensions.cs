@@ -28,14 +28,20 @@ namespace EditorUtilities.Editor.Extensions
             );
         }
 
-        public static Rect AddPadding(this Rect _instance, float _padding)
+        public static Rect AddPadding(ref this Rect _instance, float _padding)
         {
             var paddingVector = new Vector2(_padding, _padding);
-            var rect = new Rect(_instance);
-            rect.position += paddingVector;
-            rect.size -= paddingVector * 2;
+            _instance.position += paddingVector;
+            _instance.size -= paddingVector * 2;
 
-            return rect;
+            return _instance;
+        }
+
+        public static Rect ExpandLeft(ref this Rect _instance, float expansion)
+        {
+            _instance.x -= expansion;
+            _instance.width += expansion;
+            return _instance;
         }
 
         public static void AddLine(ref this Rect _instance)

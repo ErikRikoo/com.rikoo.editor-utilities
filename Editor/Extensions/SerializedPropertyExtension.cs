@@ -21,8 +21,9 @@ namespace EditorUtilities.Editor.Extensions
         private static Regex regex = new Regex(@".*\[(\d+)\]");
         public static int GetPropertyIndexInArray(this string instance)
         {
-            Match match = regex.Match(instance);
-            return Convert.ToInt32(match.Groups[1].Value);
+            MatchCollection match = regex.Matches(instance);
+            
+            return Convert.ToInt32(match[match.Count - 1].Groups[1].Value);
         }
         
         public static int GetPropertyIndexInArray(this SerializedProperty instance)
@@ -200,6 +201,24 @@ namespace EditorUtilities.Editor.Extensions
 
             _index = -1;
             return false;
+        }
+
+        public static SerializedProperty GetParent(this SerializedProperty _instance)
+        {
+            string propertyPath = _instance.propertyPath;
+            int lastDotOccurence = propertyPath.LastIndexOf('.');
+            if (lastDotOccurence == -1)
+            {
+                return null;
+            }
+            
+            int lastArrayDataOccurence = propertyPath.LastIndexOf("data");
+            int substrEnd = lastArrayDataOccurence > lastDotOccurence
+                ? propertyPath.LastIndexOf(".Array.data")
+                : lastDotOccurence;
+            string parentPath = _instance.propertyPath.Substring(0, substrEnd);
+
+            return _instance.serializedObject.FindProperty(parentPath);
         }
     }
 }
