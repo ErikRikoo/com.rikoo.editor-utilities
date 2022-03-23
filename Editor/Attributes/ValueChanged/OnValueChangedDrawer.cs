@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using EditorUtilities.Editor.Utilities;
+using UnityEditor;
 using UnityEngine;
 
 namespace Attributes.ValueChanged
@@ -13,23 +14,30 @@ namespace Attributes.ValueChanged
     [CustomPropertyDrawer(typeof(OnValueChangedAttribute))]
     public class OnValueChangedDrawer : PropertyDrawer
     {
-        private OnValueChangedAttribute Attr => attribute as OnValueChangedAttribute;
+        private class Data
+        {
+            public ChangeType m_ChangeType;
+        }
         
-        private ChangeType m_ChangeType;
+        private OnValueChangedAttribute Attr => attribute as OnValueChangedAttribute;
         
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            bool canBeDelayed = CanBeDelayed(property);
             EventType currentEventType = Event.current.type;
             KeyCode currentKeyCode = Event.current.keyCode;
             EditorGUI.PropertyField(position, property, label);
 
+            int lastCOntrolId = VariousEditorGUIUtilities.LastControlID;
+            var data = GUIUtility.GetStateObject(typeof(Data), lastCOntrolId) as Data;
             if (EditorGUI.EndChangeCheck())
             {
-                if (!Attr.CallOnlyWhenModificationOver)
+                if (!canBeDelayed || !Attr.CallOnlyWhenModificationOver)
                 {
                     CallMethod(property);
-                } else {
-                    m_ChangeType = currentEventType switch
+                } else
+                {
+                    data.m_ChangeType = currentEventType switch
                     {
                         EventType.MouseDrag => ChangeType.Mouse,
                         EventType.KeyDown => ChangeType.Keyboard,
@@ -38,20 +46,28 @@ namespace Attributes.ValueChanged
                 }
             }
 
-            if (Attr.CallOnlyWhenModificationOver && m_ChangeType != ChangeType.None)
+            if (canBeDelayed && Attr.CallOnlyWhenModificationOver && data.m_ChangeType != ChangeType.None)
             {
-                switch (m_ChangeType)
+                
+                switch (data.m_ChangeType)
                 {
                     case ChangeType.Keyboard when currentKeyCode == KeyCode.Return || currentKeyCode == KeyCode.Escape:
-                        m_ChangeType = ChangeType.None;
+                        data.m_ChangeType = ChangeType.None;
                         CallMethod(property);
                         break;
                     case ChangeType.Mouse when currentEventType == EventType.MouseUp:
-                        m_ChangeType = ChangeType.None;
+                        data.m_ChangeType = ChangeType.None;
                         CallMethod(property);
                         break;
                 }
             }
+        }
+
+        private bool CanBeDelayed(SerializedProperty property)
+        {
+            return property.propertyType == SerializedPropertyType.Float ||
+                   property.propertyType == SerializedPropertyType.Integer ||
+                   property.propertyType == SerializedPropertyType.String;
         }
 
         private void CallMethod(SerializedProperty _property)
