@@ -8,7 +8,7 @@ namespace Attributes.ValueChanged
 
         public readonly bool CallOnlyWhenModificationOver;
         
-        public OnValueChangedAttribute(string _method, bool callOnlyWhenModificationOver = false)
+        public OnValueChangedAttribute(string _method, bool callOnlyWhenModificationOver = true)
         {
             Method = _method;
             CallOnlyWhenModificationOver = callOnlyWhenModificationOver;
