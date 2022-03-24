@@ -163,5 +163,18 @@ namespace EditorUtilities.Editor.Utilities
             _normal = default;
             return false;
         }
+
+        public static void DrawPropertyChildren(Rect position, SerializedProperty property)
+        {
+            foreach (var child in property.GetChildren())
+            {
+                float propertyHeight = EditorGUI.GetPropertyHeight(child);
+                Rect propertyRect = position;
+                propertyRect.height = propertyHeight;
+                EditorGUI.PropertyField(propertyRect, child, true);
+                
+                position.AddLine(propertyHeight);
+            }  
+        }
     }
 }

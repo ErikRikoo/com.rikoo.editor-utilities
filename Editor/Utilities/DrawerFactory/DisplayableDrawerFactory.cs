@@ -13,7 +13,7 @@ namespace Utilities.DrawerFactory
 
         public DisplayableDrawerFactory()
         {
-            m_Types = DisplayableTypes.CreateFromSubClass<ABaseDrawer>();
+            m_Types = DisplayableTypes.CreateFromSubClass<DrawerType>();
             m_Instances = m_Types.Types
                 .Select(t => (DrawerType)Activator.CreateInstance(t))
                 .ToDictionary(drawer => drawer.HandledType);
