@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using EditorUtilities.Editor.Extensions;
 using EditorUtilities.Editor.Extensions.TypeSystemUtilities;
 using EditorUtilities.Editor.Utilities;
@@ -6,22 +7,29 @@ using Logic.Scripts.Utilities.Extensions;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using Utilities.DrawerFactory;
 
 namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 {
     public abstract class APropertyHandler
     {
+        private static DisplayableDrawerFactory<ABaseDrawer> s_Drawers = new DisplayableDrawerFactory<ABaseDrawer>();
+
         private static readonly Color DarkerColor = new Color(0.19f, 0.19f, 0.19f);
         private static readonly float FoldoutArrowSize = 12;
-        public static readonly int Padding = 4;
+        public static readonly int Padding = 3;
 
         protected InstanceField m_Value;
         protected SerializedProperty m_Property;
+        protected FieldInfo m_FieldInfo;
 
-        public void Init(SerializedProperty property)
+        public Type PropertyType => m_Value.Value?.GetType();
+
+        public void Init(SerializedProperty property, FieldInfo fieldInfo)
         {
             m_Value = property.GetInstanceField();
             m_Property = property;
+            m_FieldInfo = fieldInfo;
         }
 
         public virtual bool HasBackground => true;
@@ -82,6 +90,8 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
             {
                 position.width -= EditorGUIUtility.singleLineHeight;
             }
+
+            position.height = EditorGUIUtility.singleLineHeight;
             if ( DisplayImplementationsPopup(baseType, position, out Type chosen))
             {
                 SetPropertyValueAndSave(chosen.GetDefaultInstance());
@@ -112,17 +122,15 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
             }
             _position.AddLine(PostDropdownMarginValue);
             ++EditorGUI.indentLevel;
-            foreach (var child in _property.GetChildren())
+            _position.Indent();
+            if (s_Drawers.TryGetDrawer(PropertyType, out ABaseDrawer _drawer))
             {
-                float propertyHeight = EditorGUI.GetPropertyHeight(child);
-                Rect propertyRect = _position;
-                propertyRect.height = propertyHeight;
-                propertyRect.Indent();
-                EditorGUI.PropertyField(propertyRect, child, true);
-                
-                _position.AddLine(propertyHeight);
+                _drawer.OnGUI(_position, _property, null);
             }
-            
+            else
+            {
+                EditorDrawingUtilities.DrawPropertyChildren(_position, _property);
+            }
             --EditorGUI.indentLevel;
         }
 
@@ -162,7 +170,7 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
             m_Property.serializedObject.ApplyModifiedProperties();
         }
 
-        public static float PostDropdownMarginValue => 3;
+        public static float PostDropdownMarginValue => 4;
         
         public static float PostDropdownMargin(SerializedProperty property)
         {
@@ -172,6 +180,13 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
         public virtual bool PreDrawing(SerializedProperty _property)
         {
             return true;
+        }
+
+        public float GetBodyHeight(SerializedProperty property, GUIContent label)
+        {
+            return s_Drawers.TryGetDrawer(PropertyType, out ABaseDrawer _drawer)
+                ? _drawer.GetPropertyHeight(property, null)
+                : EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight;
         }
     }
 }

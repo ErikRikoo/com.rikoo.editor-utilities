@@ -25,6 +25,7 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
             {
                 var parent = _property.GetParent();
                 parent.DeleteArrayElementAtIndex(parent.arraySize - 1);
+                m_RemoveLastOn = String.Empty;
                 return false;
             }
 

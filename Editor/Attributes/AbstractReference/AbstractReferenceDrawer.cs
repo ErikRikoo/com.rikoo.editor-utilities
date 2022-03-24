@@ -21,7 +21,6 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference
         {
             EditorGUI.BeginChangeCheck();
             APropertyHandler handler = GetRightPropertyHandler(property);
-            handler.Init(property);
             handler.HandleProperty(position, property, label);
             if (EditorGUI.EndChangeCheck())
             {
@@ -31,20 +30,23 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference
 
         private APropertyHandler GetRightPropertyHandler(SerializedProperty property)
         {
-            
             if (fieldInfo.FieldType.IsArray)
             {
+                ArrayProperty.Init(property, fieldInfo);
                 return ArrayProperty;
             }
 
+            DirectPropertyHandler.Init(property, fieldInfo);
             return DirectPropertyHandler;
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return APropertyHandler.Padding * 2 + (property.GetInstanceField().Value == null
-                ? EditorGUIUtility.singleLineHeight
-                : EditorGUI.GetPropertyHeight(property)) + APropertyHandler.PostDropdownMargin(property);
+            return APropertyHandler.Padding * 2 + EditorGUIUtility.singleLineHeight +
+            
+            (property.GetInstanceField().Value == null
+                ? 0
+                : GetRightPropertyHandler(property).GetBodyHeight(property, label)) + APropertyHandler.PostDropdownMargin(property);
         }
     }
 }

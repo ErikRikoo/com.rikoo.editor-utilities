@@ -13,7 +13,7 @@ namespace EditorUtilities.Editor.Extensions
                 width, _instance.height
             );
         }
-        
+
         public static void SplitRectHorizontally(this Rect _instance, out Rect _left, out Rect _right, float _ratio = 0.5f)
         {
             float splitWidth = _instance.width * _ratio;
@@ -41,6 +41,13 @@ namespace EditorUtilities.Editor.Extensions
         {
             _instance.x -= expansion;
             _instance.width += expansion;
+            return _instance;
+        }
+        
+        public static Rect ShrinkLeft(ref this Rect _instance, float shrink)
+        {
+            _instance.x += shrink;
+            
             return _instance;
         }
 
