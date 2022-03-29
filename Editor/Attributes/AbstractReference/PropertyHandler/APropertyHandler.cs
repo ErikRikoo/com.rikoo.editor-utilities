@@ -13,7 +13,7 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 {
     public abstract class APropertyHandler
     {
-        private static DisplayableDrawerFactory<ABaseDrawer> s_Drawers = new DisplayableDrawerFactory<ABaseDrawer>();
+        private static ObjectDrawerFactory<AObjectDrawer> s_Drawers = new ObjectDrawerFactory<AObjectDrawer>();
 
         private static readonly Color DarkerColor = new Color(0.19f, 0.19f, 0.19f);
         private static readonly float FoldoutArrowSize = 12;
@@ -123,7 +123,7 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
             _position.AddLine(PostDropdownMarginValue);
             ++EditorGUI.indentLevel;
             _position.Indent();
-            if (s_Drawers.TryGetDrawer(PropertyType, out ABaseDrawer _drawer))
+            if (s_Drawers.TryGetDrawer(PropertyType, out AObjectDrawer _drawer))
             {
                 _drawer.OnGUI(_position, _property, null);
             }
@@ -184,7 +184,7 @@ namespace EditorUtilities.Editor.Attributes.AbstractReference.PropertyHandler
 
         public float GetBodyHeight(SerializedProperty property, GUIContent label)
         {
-            return s_Drawers.TryGetDrawer(PropertyType, out ABaseDrawer _drawer)
+            return s_Drawers.TryGetDrawer(PropertyType, out AObjectDrawer _drawer)
                 ? _drawer.GetPropertyHeight(property, null)
                 : EditorGUI.GetPropertyHeight(property) - EditorGUIUtility.singleLineHeight;
         }

@@ -1,4 +1,5 @@
-﻿using EditorUtilities.Editor.Extensions;
+﻿using Codice.Utils;
+using EditorUtilities.Editor.Extensions;
 using EditorUtilities.Editor.Utilities.Layout.LayoutUtilities;
 using UnityEditor;
 using UnityEngine;
@@ -28,6 +29,29 @@ namespace EditorUtilities.Editor.Utilities
                 EditorGUI.DrawRect(barRect, Color.white);
             }
             EditorGUILayout.EndHorizontal();
+        }
+
+        public static void DrawAsHeader(this string _instance, Rect _position, float _padding = 20f)
+        {
+            float lineSize = 1;
+            float margin = 15;
+            float textWidth = GUI.skin.label.CalcSize(new GUIContent(_instance)).x;
+            
+            EditorGUI.LabelField(_position, _instance, GUI.skin.label.CenterText().Bold());
+            Rect fullDrawingRect = new Rect(
+                _position.x + _padding,
+                _position.y + (_position.height) * 0.5f,
+                _position.width - _padding * 2f,
+                lineSize);
+            float lineWidth = (fullDrawingRect.width - textWidth) * 0.5f - margin;
+
+            Rect leftPart = new Rect(fullDrawingRect);
+            leftPart.width = lineWidth; 
+            EditorGUI.DrawRect(leftPart, Color.white);
+            
+            Rect rightPart = new Rect(fullDrawingRect);
+            rightPart.xMin = rightPart.xMax - lineWidth;
+            EditorGUI.DrawRect(rightPart, Color.white);
         }
         
         public static void DrawAsHeader(this string _instance, float _padding = 10f, float _topMargin = 10f)
@@ -175,6 +199,13 @@ namespace EditorUtilities.Editor.Utilities
                 
                 position.AddLine(propertyHeight);
             }  
+        }
+
+        public static void DrawLineInTheCenter(this Rect _space, float _height = 1f)
+        {
+            _space.y = _space.y + _space.height * 0.5f;
+            _space.height = _height;
+            EditorGUI.DrawRect(_space, Color.white);
         }
     }
 }

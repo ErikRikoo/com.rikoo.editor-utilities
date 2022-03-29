@@ -1,17 +1,11 @@
-﻿using System;
-using EditorUtilities.Editor.Utilities;
+﻿using EditorUtilities.Editor.Utilities;
 using UnityEditor;
 using UnityEngine;
 
 namespace Utilities.DrawerFactory
 {
-    public abstract class ABaseDrawer
+    public abstract class ADrawer
     {
-        public abstract Type HandledType
-        {
-            get;
-        }
-
         public virtual void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             if (label == null)
@@ -32,5 +26,7 @@ namespace Utilities.DrawerFactory
                        : 0f
                    );
         }
+        
+        public virtual void OnSceneGUI(Transform _worldTransform, SerializedProperty _property) {}
     }
 }
