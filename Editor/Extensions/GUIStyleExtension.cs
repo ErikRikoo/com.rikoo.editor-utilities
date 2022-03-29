@@ -27,7 +27,7 @@ namespace EditorUtilities.Editor.Extensions
             _style.fontStyle = FontStyle.Bold;
             return _style;
         }
-        
+
         public static GUIStyle ClearInteractivity(this GUIStyle _style)
         {
             _style.hover = _style.normal;

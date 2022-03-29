@@ -5,12 +5,12 @@ namespace EditorUtilities.Editor.Extensions
 {
     public static class RectExtensions
     {
-        public static Rect SubRect(this Rect _instance, int _index, int _columnCount)
+        public static Rect SubRect(this Rect _instance, int _index, int _columnCount, int _span = 1)
         {
             float width = _instance.width / _columnCount;
             return new Rect(
                 _instance.x + width * _index, _instance.y,
-                width, _instance.height
+                width * Mathf.Min(_span, _columnCount - _index), _instance.height
             );
         }
 
@@ -31,23 +31,34 @@ namespace EditorUtilities.Editor.Extensions
         public static Rect AddPadding(ref this Rect _instance, float _padding)
         {
             var paddingVector = new Vector2(_padding, _padding);
-            _instance.position += paddingVector;
-            _instance.size -= paddingVector * 2;
+            _instance.min += paddingVector;
+            _instance.max -= paddingVector;
 
             return _instance;
         }
 
         public static Rect ExpandLeft(ref this Rect _instance, float expansion)
         {
-            _instance.x -= expansion;
-            _instance.width += expansion;
-            return _instance;
+            return _instance.ShrinkLeft(-expansion);
         }
         
         public static Rect ShrinkLeft(ref this Rect _instance, float shrink)
         {
-            _instance.x += shrink;
+            _instance.xMin += shrink;
             
+            return _instance;
+        }
+        
+        public static Rect ShrinkRight(ref this Rect _instance, float shrink)
+        {
+            _instance.xMax -= shrink;
+            
+            return _instance;
+        }
+
+        public static Rect IgnorePaddingLeft(ref this Rect _instance)
+        {
+            _instance.ExpandLeft(EditorStyles.inspectorDefaultMargins.padding.left);
             return _instance;
         }
 
@@ -58,8 +69,13 @@ namespace EditorUtilities.Editor.Extensions
         
         public static void AddLine(ref this Rect _instance, float _lineHeight)
         {
-            _instance.height -= _lineHeight;
-            _instance.y += _lineHeight;
+            _instance.yMin += _lineHeight;
+        }
+
+        public static void NextLine(ref this Rect _instance)
+        {
+            _instance.AddLine();
+            _instance.height = EditorGUIUtility.singleLineHeight;
         }
 
         public static void Indent(ref this Rect _instance)
