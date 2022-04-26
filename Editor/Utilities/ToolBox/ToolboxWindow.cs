@@ -88,7 +88,14 @@ namespace EditorUtilities.Editor.Utilities.ToolBox
                             .Select(Activator.CreateInstance).Cast<ToolType>()
                     );
             }
+            
+            foreach (var instance in m_Instances)
+            {
+                OnToolsInit(instance);
+            }
         }
+
+        protected virtual void OnToolsInit(ToolType instance) { }
 
         #endregion
 
