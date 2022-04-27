@@ -10,6 +10,8 @@ namespace EditorUtilities.Editor.Utilities.ToolBox
     public abstract class ToolboxWindow<ToolType> : EditorWindow
     where ToolType : ATool
     {
+        protected bool ShouldDrawTool = true;
+    
         public abstract int ToolBoxRowSize
         {
             get;
@@ -54,7 +56,10 @@ namespace EditorUtilities.Editor.Utilities.ToolBox
         private void OnSceneGUI(SceneView sceneView)
         {
             SceneGUI();
-            CurrentTool?.OnSceneGUI(sceneView);
+            if (ShouldDrawTool)
+            {
+                CurrentTool?.OnSceneGUI(sceneView);
+            }
         }
 
         protected virtual void SceneGUI() { }
@@ -101,7 +106,7 @@ namespace EditorUtilities.Editor.Utilities.ToolBox
 
         #region Delegates Handling
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             InitToolsIfNeeded();
             SceneView.duringSceneGui -= OnSceneGUI;
